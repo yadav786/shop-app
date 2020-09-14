@@ -2,8 +2,6 @@ import React, { useEffect, useCallback, useReducer, useState } from 'react';
 import {
   View,
   ScrollView,
-  Text,
-  TextInput,
   StyleSheet,
   Platform,
   Alert,

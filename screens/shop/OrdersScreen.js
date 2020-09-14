@@ -30,7 +30,16 @@ const OrdersScreen = props => {
   }
 
   if(isLoading){
-    <View style={styles.centered}><ActivityIndicator size="large" color={Colors.primary}/></View>
+    return(<View style={style.centered}><ActivityIndicator size="large" color={Colors.primary}/></View>)
+  }
+
+  
+  if(orders.length === 0){
+    return(
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>No Orders found!</Text>
+      </View>
+    )
   }
 
   return (

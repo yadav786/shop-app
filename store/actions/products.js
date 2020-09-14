@@ -6,8 +6,9 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProducts = () => {
-  return async dispatch => {
+  return async (dispatch, getState)  => {
    try {
+    const userId = getState().auth.userId;
     const response = await fetch('https://absoluteindialocations-147909.firebaseio.com/products.json');
     if(!response.ok){
         throw new Error('Something went wrong');
@@ -15,9 +16,9 @@ export const fetchProducts = () => {
     const responseData = await response.json();
     const loadedProducts = [];
     for(const key in responseData){
-      loadedProducts.push(new Product(key, 'u1', responseData[key].title, responseData[key].imageUrl, responseData[key].description, responseData[key].price));
+      loadedProducts.push(new Product(key, responseData[key].ownerId, responseData[key].title, responseData[key].imageUrl, responseData[key].description, responseData[key].price));
     }
-    dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+    dispatch({ type: SET_PRODUCTS, products: loadedProducts, userProducts: loadedProducts.filter(prod => prod.ownerId === userId) });
  }
  catch(err) {
     throw new Error('Got error');
@@ -26,9 +27,10 @@ export const fetchProducts = () => {
 }
 
 export const deleteProduct = productId => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
-    const response = await fetch(`https://absoluteindialocations-147909.firebaseio.com/products/${productId}.json`, {
+    const token = getState().auth.token;
+    const response = await fetch(`https://absoluteindialocations-147909.firebaseio.com/products/${productId}.json?auth=${token}`, {
       method: 'DELETE'
     });
     if(!response.ok){
@@ -45,8 +47,10 @@ export const deleteProduct = productId => {
 };
 
 export const createProduct = (title, description, imageUrl, price) => {
-  return async dispatch => {
-    const response = await fetch('https://absoluteindialocations-147909.firebaseio.com/products.json', {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const userId = getState().auth.userId;
+    const response = await fetch(`https://absoluteindialocations-147909.firebaseio.com/products.json?auth=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -55,7 +59,8 @@ export const createProduct = (title, description, imageUrl, price) => {
         title,
         description,
         imageUrl,
-        price
+        price,
+        ownerId: userId
       })
     });
     if(!response.ok){
@@ -70,16 +75,18 @@ export const createProduct = (title, description, imageUrl, price) => {
         title,
         description,
         imageUrl,
-        price
+        price,
+        ownerId: userId
       }
   });
   };
 };
 
 export const updateProduct = (id, title, description, imageUrl) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     try {
-    const response = await fetch(`https://absoluteindialocations-147909.firebaseio.com/products/${id}.json`, {
+    const response = await fetch(`https://absoluteindialocations-147909.firebaseio.com/products/${id}.json?auth=${token}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -96,7 +103,7 @@ export const updateProduct = (id, title, description, imageUrl) => {
     await response.json();
   }
   catch(err){
-
+    
   }
   }
 };
