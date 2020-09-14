@@ -5,9 +5,7 @@
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": [
-      "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,10 +21,13 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "useNextNotificationsApi": true
+    },
     "ios": {
       "supportsTablet": true
     },
-    "description": "",
+    "description": "Book your meal at your door.",
     "githubUrl": "https://github.com/yadav786/shop-app/tree/dev"
   }
 }

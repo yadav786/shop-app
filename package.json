@@ -28,7 +28,9 @@
     "react-navigation-tabs": "^2.9.0",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "expo-notifications": "~0.3.3",
+    "expo-permissions": "~9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
